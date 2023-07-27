@@ -3,7 +3,7 @@
 <p align="center">
   <a href="https://github.com/magrininicolas/placesAPIMVC/blob/main/LICENSE">
     <img src="https://img.shields.io/npm/l/react" alt="NPM License" />
-  </a>
+ hjhhiuiiiiu </a>
   <a href="https://www.linkedin.com/in/nicolasgmpereira">
     <img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn" />
   </a>
@@ -11,7 +11,7 @@
 
 API for managing places (CRUD) that is part of [this challenge](https://github.com/RocketBus/quero-ser-clickbus/tree/master/testes/backend-developer) for backend developers applying to ClickBus.
 
-I make this project to practice what I've been studying in backend development with Java/Spring Boot.
+I made this project to practice what I've been studying in backend development with Java/Spring Boot.
 
 ## Technologies Used
 
@@ -180,7 +180,7 @@ Response Body:
 URL: http://localhost:8080/places
 Method: GET
 
-This method simply return all places included in database.
+This method simply returns all places included in database.
 ```
 
 - GET /places/name?name=?

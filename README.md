@@ -182,9 +182,9 @@ Method: GET
 
 This method simply return all places included in database.
 ```
-![GET by Name Mapping](https://github.com/magrininicolas/placesAPIMVC/blob/main/src/main/resources/imgs/getname.png)
-- GET /places/name?name=?
 
+- GET /places/name?name=?
+![GET by Name Mapping](https://github.com/magrininicolas/placesAPIMVC/blob/main/src/main/resources/imgs/getname.png)
 ```
 URL: http://localhost:8080/places/name?name=name
 Method: GET

@@ -1,12 +1,12 @@
 <h1 align="center">Places API</h1>
 
-[![NPM](https://img.shields.io/npm/l/react)](https://github.com/magrininicolas/placesAPIMVC/blob/main/LICENSE)
-
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/nicolasgmpereira)
-
 <p align="center">
-  <img src="https://img.shields.io/npm/l/react" alt="NPM License" />
-  <img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn" />
+  <a href="https://github.com/magrininicolas/placesAPIMVC/blob/main/LICENSE">
+    <img src="https://img.shields.io/npm/l/react" alt="NPM License" />
+  </a>
+  <a href="https://www.linkedin.com/in/nicolasgmpereira">
+    <img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn" />
+  </a>
 </p>
 
 API for managing places (CRUD) that is part of [this challenge](https://github.com/RocketBus/quero-ser-clickbus/tree/master/testes/backend-developer) for backend developers applying to ClickBus.

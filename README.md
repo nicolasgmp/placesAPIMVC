@@ -1,5 +1,10 @@
 <h1 align="center">Places API</h1>
 
+[![NPM](https://img.shields.io/npm/l/react)](https://github.com/magrininicolas/placesAPIMVC/blob/main/LICENSE)
+
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/nicolasgmpereira)
+
+
 API for managing places (CRUD) that is part of [this challenge](https://github.com/RocketBus/quero-ser-clickbus/tree/master/testes/backend-developer) for backend developers applying to ClickBus.
 
 I make this project to practice what I've been studying in backend development with Java/Spring Boot.
@@ -78,7 +83,7 @@ The Swagger can be visualized at [localhost:8080/swagger-ui.html](http://localho
 The HTTP requests below were made using [Postman](https://www.postman.com/downloads/)
 
 - POST /places
-
+![POST Mapping](https://github.com/magrininicolas/placesAPIMVC/blob/main/src/main/resources/imgs/post.png)
 ```
 URL: http://localhost:8080/places
 Method: POST
@@ -106,7 +111,7 @@ Response Body:
 ```
 
 - GET /places/{id}
-
+![GET by ID Mapping](https://github.com/magrininicolas/placesAPIMVC/blob/main/src/main/resources/imgs/getid.png)
 ```
 URL: http://localhost:8080/places/e79b4afe-efd0-4d9a-ace1-4a02744b2810
 Method: GET
@@ -127,7 +132,7 @@ Response Body:
 ```
 
 - GET /places/{page}/{qtyUsers}
-
+![GET by Page Mapping](https://github.com/magrininicolas/placesAPIMVC/blob/main/src/main/resources/imgs/getpage.png)
 ```
 URL: http://localhost:8080/places/1/3
 Method: GET
@@ -166,14 +171,14 @@ Response Body:
 ```
 
 - GET /places
-
+![GET all Mapping](https://github.com/magrininicolas/placesAPIMVC/blob/main/src/main/resources/imgs/getall.png)
 ```
 URL: http://localhost:8080/places
 Method: GET
 
 This method simply return all places included in database.
 ```
-
+![GET by Name Mapping](https://github.com/magrininicolas/placesAPIMVC/blob/main/src/main/resources/imgs/getname.png)
 - GET /places/name?name=?
 
 ```
@@ -198,7 +203,7 @@ Response Body:
 ```
 
 - PATCH /places/{id}
-
+![PATCH Mapping](https://github.com/magrininicolas/placesAPIMVC/blob/main/src/main/resources/imgs/patch.png)
 ```
 URL: http://localhost:8080/places/e79b4afe-efd0-4d9a-ace1-4a02744b2810
 Method: PATCH
@@ -226,7 +231,7 @@ Response Body:
 ```
 
 - DELETE /places/{id}
-
+![DELET Mapping](https://github.com/magrininicolas/placesAPIMVC/blob/main/src/main/resources/imgs/delete.png)
 ```
 URL: http://localhost:8080/places/e79b4afe-efd0-4d9a-ace1-4a02744b2810
 Method: DELETE

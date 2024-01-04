@@ -29,32 +29,39 @@ import lombok.Setter;
 @Entity
 @Table(name = "TB_PLACES")
 @EntityListeners(AuditingEntityListener.class)
-public class Place implements Serializable {
+public class PlaceModel implements Serializable {
 
   private static final long serialVersionUID = 1L;
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(name = "id_place")
-  UUID id;
+  private UUID id;
 
   @Column(name = "place_name")
-  String name;
+  private String name;
 
   @Column(name = "place_slug")
-  String slug;
+  private String slug;
 
   @Column(name = "place_city")
-  String city;
+  private String city;
 
   @Column(name = "place_state")
-  String state;
+  private String state;
 
   @CreatedDate
   @Column(name = "created_at")
-  LocalDateTime createdAt;
+  private LocalDateTime createdAt;
 
   @LastModifiedDate
   @Column(name = "updated_at")
-  LocalDateTime updatedAt;
+  private LocalDateTime updatedAt;
+
+  public PlaceModel(String name, String slug, String city, String state) {
+    this.name = name;
+    this.slug = slug;
+    this.city = city;
+    this.state = state;
+  }
 }

@@ -29,7 +29,7 @@ import br.com.nicolas.apilugaresmvc.domain.services.PlaceService;
 import br.com.nicolas.apilugaresmvc.web.controllers.PlaceController;
 
 @ExtendWith(MockitoExtension.class)
-public class PlaceControllerTest {
+class PlaceControllerTest {
 
   private static final UUID RANDOM_UUID = UUID.randomUUID();
 
@@ -69,28 +69,30 @@ public class PlaceControllerTest {
   }
 
   @Test
-  void mustCreatePlaceResponse(){
+  void mustCreatePlaceResponse() {
     when(placeService.createPlace(placeRequestDTO)).thenReturn(placeResponseDTO);
 
     ResponseEntity<PlaceResponseDTO> response = assertDoesNotThrow(() -> placeController.createPlace(placeRequestDTO));
 
     assertEquals(ResponseEntity.status(HttpStatus.CREATED).body(placeService.createPlace(placeRequestDTO)), response);
     assertNotNull(response);
-    
+
   }
 
   @Test
   void mustEditPlaceResponse() {
     when(placeService.editPlace(RANDOM_UUID, placeRequestDTO)).thenReturn(placeResponseDTO);
 
-    ResponseEntity<PlaceResponseDTO> response = assertDoesNotThrow(() -> placeController.editPlace(RANDOM_UUID, placeRequestDTO));
+    ResponseEntity<PlaceResponseDTO> response = assertDoesNotThrow(
+        () -> placeController.editPlace(RANDOM_UUID, placeRequestDTO));
 
     assertNotNull(response);
     assertNotNull(response.getBody());
     assertEquals(ResponseEntity.class, response.getClass());
     assertEquals(PlaceResponseDTO.class, response.getBody().getClass());
-    assertEquals(ResponseEntity.status(HttpStatus.OK).body(placeService.editPlace(RANDOM_UUID, placeRequestDTO)), response);
-    
+    assertEquals(ResponseEntity.status(HttpStatus.OK).body(placeService.editPlace(RANDOM_UUID, placeRequestDTO)),
+        response);
+
     assertEquals(NAME, response.getBody().name());
     assertEquals(SLUG, response.getBody().slug());
     assertEquals(CITY, response.getBody().city());
@@ -101,7 +103,7 @@ public class PlaceControllerTest {
   }
 
   @Test
-  void mustGetPlaceByIdResponse(){
+  void mustGetPlaceByIdResponse() {
     when(placeService.getPlaceById(RANDOM_UUID)).thenReturn(placeResponseDTO);
 
     ResponseEntity<PlaceResponseDTO> response = assertDoesNotThrow(() -> placeController.getPlaceById(RANDOM_UUID));
@@ -130,8 +132,8 @@ public class PlaceControllerTest {
   }
 
   @Test
-  void mustGetPlaceByPage(){
-    when(placeService.getPlacesByPage(5, 10)).thenReturn(List.of(placeResponseDTO));	
+  void mustGetPlaceByPage() {
+    when(placeService.getPlacesByPage(5, 10)).thenReturn(List.of(placeResponseDTO));
 
     var response = assertDoesNotThrow(() -> placeController.getPlacesByPage(5, 10));
 
@@ -140,7 +142,7 @@ public class PlaceControllerTest {
   }
 
   @Test
-  void mustGetPlaceByName(){
+  void mustGetPlaceByName() {
     when(placeService.getPlaceByName(NAME)).thenReturn(List.of(placeResponseDTO));
 
     ResponseEntity<List<PlaceResponseDTO>> response = assertDoesNotThrow(() -> placeController.getPlaceByName(NAME));

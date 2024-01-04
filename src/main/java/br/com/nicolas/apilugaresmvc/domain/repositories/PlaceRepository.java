@@ -1,20 +1,18 @@
 package br.com.nicolas.apilugaresmvc.domain.repositories;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import br.com.nicolas.apilugaresmvc.domain.entities.Place;
+import br.com.nicolas.apilugaresmvc.domain.entities.PlaceModel;
+import jakarta.validation.constraints.NotBlank;
 
-public interface PlaceRepository extends JpaRepository<Place, UUID> {
+public interface PlaceRepository extends JpaRepository<PlaceModel, UUID> {
 
-  public List<Place> findAllByNameIgnoreCase(String name);
+  public Optional<List<PlaceModel>> findAllByNameIgnoreCase(String name);
 
-  public List<Place> findByNameIgnoreCase(String name);
-
-  public List<Place> findByCityIgnoreCase(String city);
-
-  public List<Place> findByStateIgnoreCase(String state);
-
+  public Optional<PlaceModel> findByNameAndCityAndStateIgnoreCase(@NotBlank String name, @NotBlank String city,
+      @NotBlank String state);
 }

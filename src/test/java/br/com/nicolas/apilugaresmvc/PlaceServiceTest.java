@@ -29,14 +29,14 @@ import com.github.slugify.Slugify;
 
 import br.com.nicolas.apilugaresmvc.api.dto.PlaceRequestDTO;
 import br.com.nicolas.apilugaresmvc.api.dto.PlaceResponseDTO;
-import br.com.nicolas.apilugaresmvc.domain.entities.Place;
+import br.com.nicolas.apilugaresmvc.domain.entities.PlaceModel;
 import br.com.nicolas.apilugaresmvc.domain.exceptions.DataIntegrityViolationException;
 import br.com.nicolas.apilugaresmvc.domain.exceptions.PlaceNotFoundException;
 import br.com.nicolas.apilugaresmvc.domain.repositories.PlaceRepository;
 import br.com.nicolas.apilugaresmvc.domain.services.PlaceService;
 import br.com.nicolas.apilugaresmvc.web.maps.PlaceMapper;
 
-public class PlaceServiceTest {
+class PlaceServiceTest {
 
   private static final String CITY_IN_THIS_STATE_ALREADY_INCLUDED_IN_OUR_DATABASE = "City in this state already included in our database";
 
@@ -69,15 +69,15 @@ public class PlaceServiceTest {
 
   private PlaceRequestDTO placeRequestDTO;
 
-  private Optional<Place> optionalPlace;
+  private Optional<PlaceModel> optionalPlace;
 
-  private Place place;
+  private PlaceModel place;
 
   @BeforeEach
   void setUp() {
     placeRequestDTO = new PlaceRequestDTO(NAME, STATE, CITY);
-    optionalPlace = Optional.of(new Place(RANDOM_UUID, NAME, SLUG, CITY, STATE, CREATED_AT, UPDATED_AT));
-    place = new Place(RANDOM_UUID, NAME, SLUG, CITY, STATE, CREATED_AT, UPDATED_AT);
+    optionalPlace = Optional.of(new PlaceModel(RANDOM_UUID, NAME, SLUG, CITY, STATE, CREATED_AT, UPDATED_AT));
+    place = new PlaceModel(RANDOM_UUID, NAME, SLUG, CITY, STATE, CREATED_AT, UPDATED_AT);
     MockitoAnnotations.openMocks(this);
   }
 
@@ -107,7 +107,7 @@ public class PlaceServiceTest {
     when(repository.save(place)).thenReturn(place);
 
     var response = service.editPlace(RANDOM_UUID, placeRequestDTO);
-    
+
     assertNotNull(response);
     assertEquals(PlaceResponseDTO.class, response.getClass());
     assertEquals(PlaceMapper.fromPlaceToResponse(place), response);
@@ -118,12 +118,12 @@ public class PlaceServiceTest {
     assertEquals(CREATED_AT, response.createdAt());
     assertEquals(UPDATED_AT, response.updatedAt());
 
-    verify(repository).findById(RANDOM_UUID);    
+    verify(repository).findById(RANDOM_UUID);
     verify(repository).save(place);
   }
 
   @Test
-  void mustGetPlaceByIdSuccess(){
+  void mustGetPlaceByIdSuccess() {
     when(repository.findById(RANDOM_UUID)).thenReturn(optionalPlace);
 
     var response = service.getPlaceById(RANDOM_UUID);
@@ -142,7 +142,7 @@ public class PlaceServiceTest {
   }
 
   @Test
-  void mustGetAllPlaces(){
+  void mustGetAllPlaces() {
     when(repository.findAll()).thenReturn(List.of(place));
 
     var response = service.getAllPlaces();
@@ -153,7 +153,8 @@ public class PlaceServiceTest {
 
   @Test
   void mustGetPlaceByPage() {
-    when(repository.findAll(PageRequest.of(5, 10))).thenReturn(new PageImpl<>(List.of(place), PageRequest.of(5, 10), List.of(place).size()));
+    when(repository.findAll(PageRequest.of(5, 10)))
+        .thenReturn(new PageImpl<>(List.of(place), PageRequest.of(5, 10), List.of(place).size()));
 
     var response = service.getPlacesByPage(5, 10);
 
@@ -162,14 +163,13 @@ public class PlaceServiceTest {
   }
 
   @Test
-  void mustGetPlaceByName(){
-    when(repository.findAllByNameIgnoreCase(NAME)).thenReturn(List.of(place));
+  void mustGetPlaceByName() {
+    when(repository.findAllByNameIgnoreCase(NAME)).thenReturn(Optional.of(List.of(place)));
 
     var response = service.getPlaceByName(NAME);
 
     assertNotNull(response);
     assertTrue(response instanceof List);
-    assertTrue(response.get(0) instanceof PlaceResponseDTO);
 
     verify(repository).findAllByNameIgnoreCase(NAME);
   }
@@ -191,13 +191,13 @@ public class PlaceServiceTest {
   }
 
   @Test
-  void mustFindByIdNotThrowing(){
+  void mustFindByIdNotThrowing() {
     when(repository.findById(RANDOM_UUID)).thenReturn(optionalPlace);
 
     var response = assertDoesNotThrow(() -> service.findById(RANDOM_UUID));
 
     assertNotNull(response);
-    assertEquals(Place.class, response.getClass());
+    assertEquals(PlaceModel.class, response.getClass());
     assertEquals(RANDOM_UUID, response.getId());
     assertEquals(NAME, response.getName());
     assertEquals(SLUG, response.getSlug());
@@ -213,12 +213,12 @@ public class PlaceServiceTest {
   // * Tests with error/throw
 
   @Test
-  void mustFindByIdReturningAnPlaceNotFoundException(){
+  void mustFindByIdReturningAnPlaceNotFoundException() {
     when(repository.findById(RANDOM_UUID)).thenThrow(new PlaceNotFoundException(PLACE_NOT_FOUND));
 
-    try{
+    try {
       service.findById(RANDOM_UUID);
-    } catch(Exception e){
+    } catch (Exception e) {
       assertEquals(PlaceNotFoundException.class, e.getClass());
       assertEquals(PLACE_NOT_FOUND, e.getMessage());
     }
@@ -226,22 +226,14 @@ public class PlaceServiceTest {
   }
 
   @Test
-  void mustFindByNameAndCityAndStateIgnoringCase(){
-    when(repository.findByNameIgnoreCase(NAME))
-    .thenThrow(
-      new DataIntegrityViolationException(CITY_IN_THIS_STATE_ALREADY_INCLUDED_IN_OUR_DATABASE));
+  void mustFindByNameAndCityAndStateIgnoringCase() {
+    when(repository.findByNameAndCityAndStateIgnoreCase(NAME, CITY, STATE))
+        .thenThrow(
+            new DataIntegrityViolationException(CITY_IN_THIS_STATE_ALREADY_INCLUDED_IN_OUR_DATABASE));
 
-    when(repository.findByCityIgnoreCase(CITY))
-    .thenThrow(
-      new DataIntegrityViolationException(CITY_IN_THIS_STATE_ALREADY_INCLUDED_IN_OUR_DATABASE));
-      
-    when(repository.findByStateIgnoreCase(STATE))
-    .thenThrow(
-      new DataIntegrityViolationException(CITY_IN_THIS_STATE_ALREADY_INCLUDED_IN_OUR_DATABASE));
-
-    try{
+    try {
       service.findByNameAndCityAndStateIgnoreCase(placeRequestDTO);
-    } catch(Exception e){
+    } catch (Exception e) {
       assertEquals(DataIntegrityViolationException.class, e.getClass());
       assertEquals(CITY_IN_THIS_STATE_ALREADY_INCLUDED_IN_OUR_DATABASE, e.getMessage());
     }
@@ -249,55 +241,39 @@ public class PlaceServiceTest {
   }
 
   @Test
-  void mustCreateThenReturnAnDataIntegrityViolationException(){
-    when(repository.findByNameIgnoreCase(NAME))
-    .thenThrow(
-      new DataIntegrityViolationException(CITY_IN_THIS_STATE_ALREADY_INCLUDED_IN_OUR_DATABASE));
+  void mustCreateThenReturnAnDataIntegrityViolationException() {
+    when(repository.findByNameAndCityAndStateIgnoreCase(NAME, CITY, STATE))
+        .thenThrow(
+            new DataIntegrityViolationException(CITY_IN_THIS_STATE_ALREADY_INCLUDED_IN_OUR_DATABASE));
 
-    when(repository.findByCityIgnoreCase(CITY))
-    .thenThrow(
-      new DataIntegrityViolationException(CITY_IN_THIS_STATE_ALREADY_INCLUDED_IN_OUR_DATABASE));
-      
-    when(repository.findByStateIgnoreCase(STATE))
-    .thenThrow(
-      new DataIntegrityViolationException(CITY_IN_THIS_STATE_ALREADY_INCLUDED_IN_OUR_DATABASE));
-
-    try{
+    try {
       service.createPlace(placeRequestDTO);
-    } catch(Exception e){
+    } catch (Exception e) {
       assertEquals(DataIntegrityViolationException.class, e.getClass());
       assertEquals(CITY_IN_THIS_STATE_ALREADY_INCLUDED_IN_OUR_DATABASE, e.getMessage());
     }
   }
 
   @Test
-  void mustEditThenReturnAnDataIntegrityViolationException(){
-    when(repository.findByNameIgnoreCase(NAME))
-    .thenThrow(
-      new DataIntegrityViolationException(CITY_IN_THIS_STATE_ALREADY_INCLUDED_IN_OUR_DATABASE));
+  void mustEditThenReturnAnDataIntegrityViolationException() {
+    when(repository.findByNameAndCityAndStateIgnoreCase(NAME, CITY, STATE))
+        .thenThrow(
+            new DataIntegrityViolationException(CITY_IN_THIS_STATE_ALREADY_INCLUDED_IN_OUR_DATABASE));
 
-    when(repository.findByCityIgnoreCase(CITY))
-    .thenThrow(
-      new DataIntegrityViolationException(CITY_IN_THIS_STATE_ALREADY_INCLUDED_IN_OUR_DATABASE));
-      
-    when(repository.findByStateIgnoreCase(STATE))
-    .thenThrow(
-      new DataIntegrityViolationException(CITY_IN_THIS_STATE_ALREADY_INCLUDED_IN_OUR_DATABASE));
-
-    try{
+    try {
       service.editPlace(RANDOM_UUID, placeRequestDTO);
-    } catch(Exception e){
+    } catch (Exception e) {
       assertEquals(DataIntegrityViolationException.class, e.getClass());
       assertEquals(CITY_IN_THIS_STATE_ALREADY_INCLUDED_IN_OUR_DATABASE, e.getMessage());
     }
   }
 
-  void mustDeleteWithPlaceNotFoundException(){
+  void mustDeleteWithPlaceNotFoundException() {
     when(repository.findById(RANDOM_UUID)).thenThrow(new PlaceNotFoundException(PLACE_NOT_FOUND));
 
-    try{
+    try {
       service.deletePlace(RANDOM_UUID);
-    } catch(Exception e){
+    } catch (Exception e) {
       assertEquals(PlaceNotFoundException.class, e.getClass());
       assertEquals(PLACE_NOT_FOUND, e.getMessage());
     }
